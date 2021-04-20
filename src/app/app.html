@@ -1,0 +1,12 @@
+
+<h1 class="title">The Writing Game</h1>
+
+<div ng-if="app.gameState === 'LOAD'">
+  <span>Loading session...</span>
+</div>
+
+<name-prompt ng-if="app.gameState === 'GETNAME'"></name-prompt>
+
+<room-list ng-if="app.gameState === 'ROOMS'"></room-list>
+
+<writing-board ng-if="app.gameState === 'INROOM'"></writing-board>

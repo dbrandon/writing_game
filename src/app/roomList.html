@@ -1,0 +1,11 @@
+<div ng-repeat="room in ctrl.rooms">
+  <span>Room is {{room.roomName}}</span>
+  <span><button ng-click="ctrl.joinRoom(room.roomName)">Join</button></span>
+</div>
+
+<div>
+  <input ng-model="ctrl.displayName">
+</div>
+
+<input ng-model="ctrl.newRoomName">
+<button ng-click="ctrl.createRoom()">Create</button>
