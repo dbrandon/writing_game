@@ -3,3 +3,6 @@
   <span><input ng-model="ctrl.newName" ng-keypress="ctrl.keypress($event)"></span>
   <span><button ng-click="ctrl.updateName()">Apply</button></span>
 </div>
+<div>
+  <span class="error-text" ng-show="ctrl.lastErrorMessage != null">{{ctrl.lastErrorMessage}}</span>
+</div>

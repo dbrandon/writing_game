@@ -1,0 +1,20 @@
+{
+  "compileOnSave" : true,
+  "compilerOptions" : {
+    "target": "es5",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
+
+  "include": [
+    "src/app/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "js"
+  ]
+}

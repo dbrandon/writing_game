@@ -1,24 +1,31 @@
-import angular from 'angular';
+import angular, { IHttpService, IScope } from 'angular';
+const ngCookies = require('angular-cookies');
+const uiBootstrap = require('ui-bootstrap4');
 
 import {namePrompt, NameCtrl} from './nameCtrl';
-import {rooms, RoomCtrl} from './roomList';
+//import {rooms, RoomCtrl} from './roomList';
 import {writingBoard, WritingBoardCtrl} from './writingBoard';
 
-import 'bootstrap'
+import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '@fortawesome/fontawesome-free/js/all'
 import '../style/app.css';
 import '../style/board.css';
 
 let app = () => {
   return {
-    template: require('./app.html'),
+    template: require('./app.html').default,
     controller: 'AppCtrl',
     controllerAs: 'app'
   }
 };
 
 class AppCtrl {
-  constructor(SessionTracker, $scope) {
+  private $scope : IScope;
+  private gameState : string;
+  private showExtra : boolean;
+
+  constructor(SessionTracker : SessionTracker, $scope : IScope) {
     this.$scope = $scope;
     this.gameState = 'LOAD';
     this.showExtra = false;
@@ -27,7 +34,7 @@ class AppCtrl {
     SessionTracker.setAppCtrl(this);
   }
 
-  setGameState(state) {
+  setGameState(state : string) {
     this.gameState = state;
     if(!this.$scope.$$phase) {
       this.$scope.$apply();
@@ -38,8 +45,26 @@ class AppCtrl {
 
 const COOKIE_NAME = 'writingGameSessionId';
 
-class SessionTracker {
-  constructor($http, $cookies) {
+
+class SessionInfo {
+  sessionId : string;
+  name : string;
+  roomName : string;
+}
+
+class SessionInfoResponse {
+  success : boolean;
+  message : string;
+  info : SessionInfo;
+}
+
+export class SessionTracker {
+  private $http : IHttpService;
+  private $cookies : angular.cookies.ICookiesService;
+  private appCtrl : AppCtrl;
+  private sessionInfo : SessionInfo;
+
+  constructor($http : IHttpService, $cookies : angular.cookies.ICookiesService) {
     this.$http = $http;
     this.$cookies = $cookies;
 
@@ -48,8 +73,13 @@ class SessionTracker {
     console.log('Instantiated the session tracker');
   }
 
-  setAppCtrl(appCtrl) {
+  setAppCtrl(appCtrl : AppCtrl) {
     this.appCtrl = appCtrl;
+  }
+
+  reloadSession() {
+    this.setGameState('LOAD');
+    this.loadSessionId();
   }
 
   loadSessionId() {
@@ -64,7 +94,7 @@ class SessionTracker {
     }
   }
 
-  requestNewSession(playerName, roomName) {
+  requestNewSession(playerName? : string, roomName? : string) {
     var request = {
       name: playerName,
       roomName: roomName || 'Brandonses'
@@ -75,18 +105,19 @@ class SessionTracker {
         method: 'PUT',
         url: '/rest/Rooms/joinOrCreate',
         data: request
-      }).then((resp) => {
-        console.log('got a session: ' + JSON.stringify(resp.data));
-        if(!resp.data.success) {
-          reject('Failed to request session: ' + resp.data.message);
+      }).then((rawresp) => {
+        let resp = rawresp.data as SessionInfoResponse;
+        console.log('got a session: ' + JSON.stringify(resp));
+        if(!resp.success) {
+          reject('Failed to request session: ' + resp.message);
         }
-        else if(resp.data.info == null) {
+        else if(resp.info == null) {
           reject('Failed to request session (did not receive a session identifier)');
         }
         else {
-          this.$cookies.put(COOKIE_NAME, resp.data.info.sessionId);
-          this.setSessionInfo(resp.data.info);
-          resolve();
+          this.$cookies.put(COOKIE_NAME, resp.info.sessionId);
+          this.setSessionInfo(resp.info);
+          resolve(null);
         }
       }, (err) => {
         console.log('Failed: ' + JSON.stringify(err));
@@ -95,22 +126,24 @@ class SessionTracker {
     });
   }
 
-  requestCurrentSession(id) {
+  requestCurrentSession(id : string) {
     console.log('request current session with ID=[' + id + ']')
     this.$http({
       method: 'GET',
       url: '/rest/Rooms/lookup/' + id
-    }).then((resp) => {
-      console.log('got my session info: ' + JSON.stringify(resp.data));
-      if(resp.data.info == null || !resp.data.success) {
+    }).then((rawresp) => {
+      let resp = rawresp.data as SessionInfoResponse;
+      console.log('got my session info: ' + JSON.stringify(resp));
+      if(resp.info == null || !resp.success) {
         this.appCtrl.setGameState('GETNAME')
       }
       else {
-        this.setSessionInfo(resp.data.info);
+        this.setSessionInfo(resp.info);
         this.appCtrl.setGameState('INROOM')
       }
     }, (err) => {
       console.log('Failed: ' + JSON.stringify(err));
+      this.appCtrl.setGameState('GETNAME');
     })
   }
 
@@ -118,26 +151,26 @@ class SessionTracker {
     return this.sessionInfo.sessionId;
   }
 
-  setSessionInfo(info) {
+  setSessionInfo(info : SessionInfo) {
     this.sessionInfo = info;
   }
 
-  setGameState(state) {
+  setGameState(state : string) {
     this.appCtrl.setGameState(state);
   }
 }
 
 const MODULE_NAME = 'app';
 
-angular.module(MODULE_NAME, [require('angular-cookies')])
+export let writingGameModule = angular.module(MODULE_NAME, [ngCookies, uiBootstrap])
   .service('SessionTracker', ['$http', '$cookies', SessionTracker])
   .directive('app', app)
   .controller('AppCtrl', ['SessionTracker', '$scope', AppCtrl])
   .directive('namePrompt', namePrompt)
-  .controller('NameCtrl', ['SessionTracker', '$scope', NameCtrl])
-  .directive('roomList', rooms)
-  .controller('RoomCtrl', RoomCtrl)
+  .controller('NameCtrl', ['SessionTracker', '$scope', '$interval', NameCtrl])
+  // .directive('roomList', rooms)
+  // .controller('RoomCtrl', RoomCtrl)
   .directive('writingBoard', writingBoard)
-  .controller('WritingBoardCtrl', ['$scope', '$http', '$interval', 'SessionTracker', WritingBoardCtrl]);
+  .controller('WritingBoardCtrl', ['$scope', '$http', '$interval', '$uibModal', 'SessionTracker', WritingBoardCtrl]);
 
 export default MODULE_NAME;

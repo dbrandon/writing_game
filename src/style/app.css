@@ -20,3 +20,13 @@ footer {
   text-align: center;
   font-size: 0.8em;
 }
+
+.error-text {
+  font-weight: bold;
+  margin: 5px 20px;
+  color: red;
+}
+
+.writing-game-modal {
+  color: black;
+}

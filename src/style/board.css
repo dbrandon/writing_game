@@ -99,6 +99,7 @@
   text-align: center;
   margin: 0px 3px;
   cursor: default;
+  position: relative;
 }
 
 .board-author-circle:hover {
@@ -106,10 +107,36 @@
   color: rgba(255, 255, 255, 0.685);
 }
 
+.board-author-expired {
+  color: red;
+  font-style: italic;
+}
+
+.board-author-afk {
+  color: gray;
+  font-style: italic;
+}
+
+.board-author-finished {
+  color: rgb(4, 243, 4);
+}
+
 .board-author-initial {
+  margin-top: -3px;
   font-size: 20px;
   font-weight: bold;
-  background: red;
+}
+
+.board-author-initial-done {
+  margin-left: -4px;
+}
+
+.board-author-finish-check {
+  color: rgb(4, 243, 4);
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  font-size: 7px;
 }
 
 .board-cur-story-fragment-container {

@@ -4,9 +4,21 @@
 </div>
 
 <div class="board-author-circle-container" ng-if="ctrl.state !== 'LOADING'">
-  <span class="board-author-circle" ng-repeat="writer in ctrl.status.writerStatusList">
-    <span class="board-author-initial">{{writer.letter}}</span>
-  </span>
+  <div class="dropdown" ng-repeat="writer in ctrl.status.writerStatusList">
+    <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span ng-class="{'board-author-circle' : true, 'board-author-finished' : writer.finished, 'board-author-expired' : writer.expired, 'board-author-afk' : writer.reportedAfk}" data-toggle="tooltip" title="Written by {{writer.author}}">
+        <span ng-class="{'board-author-initial' : true, 'board-author-initial-done' : writer.finished}">{{writer.letter}}</span>
+        <span class="board-author-finish-check" ng-show="writer.finished"><i class="fas fa-check"></i></span>
+      </span>
+    </span>
+    <div class="dropdown-menu">
+      <h6 class="dropdown-header">{{writer.author}}</h6>
+      <h6 class="dropdown-header" ng-show="writer.expired">(Session Expired)</h6>
+      <h6 class="dropdown-header" ng-show="writer.reportedAfk">(Reported AFK)</h6>
+      <a class="dropdown-item" href="#" ng-click="ctrl.authorCommand(writer, 'KICK')"><i class="fas fa-thumbs-down"></i> Give {{writer.author}} das boot!</a>
+      <a class="dropdown-item" href="#" ng-click="ctrl.authorCommand(writer, 'MARK_AFK')"><i class="fas fa-user-times"></i> Report Away</a>
+    </div>
+  </div>
 </div>
 
 <div ng-if="ctrl.state === 'WRITING'">
