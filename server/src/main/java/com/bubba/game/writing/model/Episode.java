@@ -16,6 +16,8 @@ import com.bubba.game.writing.rest.types.FragmentUpdate;
 import com.bubba.game.writing.rest.types.RoomStatus;
 import com.bubba.game.writing.rest.types.RoomStatusResponse;
 import com.bubba.game.writing.rest.types.WriterStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Group of stories that were rotated between authors
@@ -207,6 +209,16 @@ public class Episode {
         log.log(Level.INFO, "Episode is finished!");
         getStoryList().forEach(story -> story.finishStory());
         finished = true;
+        
+        FinishedStoryResponse resp = getFinishedStory(sessionMap);
+        ObjectMapper mapper = new ObjectMapper();
+        
+        try {
+          mapper.writeValueAsString(resp.getStory());
+        } catch (JsonProcessingException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
       else {
         log.log(Level.INFO, "Need to advance to next round!");
