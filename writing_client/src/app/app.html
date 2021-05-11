@@ -1,0 +1,12 @@
+
+<h1 class="app-title">Scribble Quibbles</h1>
+
+<div ng-if="app.gameState.stateName === 'LOAD'">
+  <span>Loading session...</span>
+</div>
+
+<name-prompt ng-if="app.gameState.stateName === 'GET_NAME'"></name-prompt>
+
+<room-list ng-if="app.gameState.stateName === 'ROOMS'"></room-list>
+
+<writing-board ng-if="app.gameState.stateName === 'IN_ROOM'"></writing-board>

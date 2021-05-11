@@ -1,0 +1,15 @@
+<div class="writing-game-modal">
+  <div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+  </div>
+
+  <div class="modal-body">
+    <span>{{message}}</span>
+    <span><input ng-model="textField" ng-keypress="keypress($event)"></span>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="handleOk()">OK</button>
+    <button class="btn btn-secondary" type="button" ng-click="handleDismiss()">Cancel</button>
+  </div>
+</div>

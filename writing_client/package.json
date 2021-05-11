@@ -1,0 +1,44 @@
+{
+  "name": "writing-game",
+  "version": "1.0.0",
+  "description": "writing game",
+  "main": "src/app/app.ts",
+  "dependencies": {
+    "@babel/core": "^7.13.16",
+    "@babel/preset-env": "^7.13.15",
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "angular": "^1.8.2",
+    "angular-cookies": "^1.8.2",
+    "babel-loader": "^8.2.2",
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0",
+    "popper.js": "^1.16.1",
+    "ui-bootstrap4": "^3.0.7"
+  },
+  "devDependencies": {
+    "@types/angular": "^1.8.1",
+    "@types/angular-cookies": "^1.8.0",
+    "@types/angular-ui-bootstrap": "^1.0.0",
+    "css-loader": "^5.2.4",
+    "file-loader": "^6.2.0",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
+    "mini-css-extract-plugin": "^1.5.0",
+    "raw-loader": "^4.0.2",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.4",
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "yargs": "^16.2.0"
+  },
+  "scripts": {
+    "build": "webpack --bail --progress --profile --mode=production",
+    "start": "webpack serve --mode=development",
+    "production": "webpack -p"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

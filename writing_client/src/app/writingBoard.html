@@ -1,0 +1,132 @@
+
+<div ng-if="ctrl.state === 'LOADING'">
+  <span>Loading board...</span>
+</div>
+
+<div class="board-author-circle-container" ng-show="ctrl.state !== 'LOADING'">
+  <div class="dropdown" ng-repeat="writer in ctrl.status.writerStatusList">
+    <span data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+      <span ng-class="{'board-author-circle' : true, 'board-author-finished' : writer.finished, 'board-author-expired' : writer.expired, 'board-author-afk' : writer.reportedAfk}" data-toggle="tooltip" title="Written by {{writer.author}}">
+        <span ng-class="{'board-author-initial' : true}">{{writer.letter}}</span>
+        <span class="board-author-finish-check" ng-show="writer.finished"><i class="fas fa-check"></i></span>
+        <span class="board-author-leader" ng-show="writer.roomLeader"><i class="fas fa-graduation-cap"></i></span>
+      </span>
+    </span>
+    <div class="dropdown-menu">
+      <h6 class="dropdown-header">{{writer.author}} {{writer.myStatus ? "(me)" : ""}}</h6>
+      <h6 class="dropdown-header" ng-show="writer.expired">(Session Expired)</h6>
+      <h6 class="dropdown-header" ng-show="writer.reportedAfk">(Reported AFK)</h6>
+      <a class="dropdown-item" href="#" ng-show="writer.myStatus" ng-click="ctrl.changeName()"><i class="fas fa-book"></i> Change my name</a>
+      <a class="dropdown-item dropleft dropdown-toggle" data-toggle="dropdown" href="#" ng-show="writer.myStatus"><i class="fas fa-font"></i> Select My Font</a>
+        <div class="dropdown-menu dropdown-menu-left" style="left: 30px;">
+          <h6 class="dropdown-header">Select My Font</h6>
+            <a ng-repeat="font in ctrl.fontList"
+             class="dropdown-item font-item"
+             ng-click="ctrl.changeFont(font)"
+             href="#">
+              <span ng-show="curFont == font" class="font-check"><i class="fas fa-check"></i></span>
+              <span ng-hide="curFont == font" class="font-check-spacer"></span>
+              <span ng-class="'font-' + font">{{font}}</span>
+            </a>
+        </div>
+
+      <a class="dropdown-item" href="#" ng-hide="writer.roomLeader" ng-click="ctrl.authorCommand(writer, 'PROMOTE_LEADER')"><i class="fas fa-graduation-cap"></i> Promote {{writer.author}} to leader</a>
+      <a class="dropdown-item" href="#" ng-click="ctrl.authorCommand(writer, 'KICK')"><i class="fas fa-thumbs-down"></i> Give {{writer.author}} das boot!</a>
+      <a class="dropdown-item" href="#" ng-hide="writer.reportedAfk" ng-click="ctrl.authorCommand(writer, 'MARK_AFK')"><i class="fas fa-user-times"></i>Report Away</a>
+      <a class="dropdown-item" href="#" ng-show="writer.myStatus && writer.reportedAfk" ng-click="ctrl.authorCommand(writer, 'MARK_NOT_AFK')"><i class="fas fa-user-plus"></i>I'm back</a>
+    </div>
+  </div>
+</div>
+
+<div ng-show="ctrl.state === 'WRITING'">
+  <div class="board-entry-section">
+    <span>Round</span>
+    <span class="board-round-counter">{{ctrl.status.roundNumber}}</span>
+    <span>of</span>
+    <span class="board-round-max" ng-click="ctrl.changeMaxRounds()">{{ctrl.status.maxRounds}}</span>
+  </div>
+
+  <div class="board-entry-section" ng-if="ctrl.status.prevVisibleFragment != null">
+    <span class="board-label">Lead:</span>
+    <span class="board-prev-lead" ng-show="ctrl.status.prevAuthorStatus">
+      {{ctrl.status.prevAuthorStatus.author}} writes:
+      <span class=" {{'font-' + ctrl.status.prevAuthorStatus.font}}" style="font-style: normal;">
+        {{ctrl.status.prevVisibleFragment}}
+      </span>
+    </span>
+    <span class="board-prev-lead" ng-hide="ctrl.status.prevAuthorStatus">
+      {{ctrl.status.prevVisibleFragment}}...
+    </span>
+  </div>
+
+  <div class="board-no-previous" ng-if="ctrl.status.prevVisibleFragment == null">
+    This is the beginning of a new story so there is no previous lead.
+  </div>
+
+  <div class="board-entry-section">
+    <span class="board-label" ng-hide="lastRound">Hidden:</span>
+    <span class="board-label font-DancingScript" ng-show="lastRound">Finale:</span>
+    <span class="board-text">
+      <textarea id="myHidden" class="board-text-area {{'font-' + curFont}}" 
+                ng-model="ctrl.frag.hiddenText" 
+                ng-keypress="ctrl.handleTextTyped('press', $event)"
+                ng-keydown="ctrl.handleTextTyped($event, 'down')"></textarea>
+      <span class="board-save-indicator" ng-show="autoSaveRunning">Saving...</span>
+    </span>
+  </div>
+
+  <div class="board-entry-section" ng-hide="lastRound">
+    <span class="board-label">Lead:</span>
+    <span class="board-text">
+      <textArea id="myLead" class="board-text-area {{'font-' + curFont}}" ng-model="ctrl.frag.visibleText" ng-keypress="ctrl.handleTextTyped($event)">
+    </textArea>
+  </div>
+
+  <div class="board-done-section">
+    <span class="board-done-indicator">
+      <input type="checkbox" ng-model="ctrl.frag.done" ng-change="ctrl.handleDoneChange()" name="doneIndicator">
+      <label for="doneIndicator">Finished with fragment</label>
+    </span>
+  </div>
+
+  <div class="board-timer-section" ng-if="ctrl.status.roundTimerRunning">
+    <span>Round ends in {{ctrl.roundTimeRemaining}} seconds...</span>
+  </div>
+</div>
+
+<div ng-if="ctrl.state === 'REVIEW'">
+  <div ng-show="ctrl.amLeader">
+    <span>Select Author</span>
+    <span class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ctrl.selectedWriter == null ? 'Select an Author' : ctrl.selectedWriter.author}}
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#" ng-repeat="writer in ctrl.status.writerStatusList" ng-click="ctrl.selectFinishedStory(writer)">
+          {{writer.author}}
+        </a>
+      </div>
+    </span>
+  </div>
+
+  <div ng-show="ctrl.curStory == null && !ctrl.amLeader">
+    <span>Waiting for the leader to select a story</span>
+  </div>
+
+  <div ng-show="ctrl.curStory != null" class="board-review-story-section">
+    <div class="board-cur-story-author {{'font-' + ctrl.curStory.font}}">{{ctrl.curStory.author}}'s Story:</div>
+    <div class="board-cur-story-fragment-container" ng-repeat="fragment in ctrl.curStory.fragmentList">
+      <span class="board-cur-fragment-author">({{fragment.author}})</span>
+      <div class="cur-fragment-text-container">
+        <span class="board-cur-fragment-hidden {{'font-' + fragment.font}}">{{fragment.hiddenText}}</span>
+        <span class="board-cur-fragment-visible {{'font-' + fragment.font}}">{{fragment.visibleText}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="board-timer-section" ng-if="ctrl.status.episodeTimerRunning">
+    <span>Next episode starts in {{ctrl.episodeTimeRemaining}} seconds...</span>
+  </div>
+  <button class="board-next-button" ng-if="ctrl.amLeader && !ctrl.status.episodeTimerRunning" ng-click="ctrl.nextEpisode()">Start Another Round</button>
+  <button class="board-next-button" ng-if="ctrl.amLeader && ctrl.status.episodeTimerRunning" ng-click="ctrl.cancelNextEpisode()">Cancel Start Next Episode</button>
+</div>

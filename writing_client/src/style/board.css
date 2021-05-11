@@ -1,0 +1,431 @@
+
+
+@font-face {
+  font-family: "Pangolin";
+  src: url("../font/Pangolin-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Titillium Web";
+  src: url("../font/TitilliumWeb-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "New Tegomin";
+  src: url("../font/NewTegomin-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Dancing Script";
+  src: url("../font/DancingScript-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "Architects Daughter";
+  src: url("../font/ArchitectsDaughter-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Caveat Variable";
+  src: url("../font/Caveat-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "Indie Flower";
+  src: url("../font/IndieFlower-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Shadows Into Light";
+  src: url("../font/ShadowsIntoLight-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'Covered By Your Grace';
+  src: url("../font/CoveredByYourGrace-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'Crafty Girls';
+  src: url('../font/CraftyGirls-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Creepster';
+  src: url('../font/Creepster-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Devonshire';
+  src: url('../font/Devonshire-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Homemade Apple';
+  src: url('../font/HomemadeApple-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Liu Jian Mao Cao';
+  src: url('../font/LiuJianMaoCao-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Mystery Quest';
+  src: url('../font/MysteryQuest-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'PeaEmilysPen';
+  src: url('../font/peaemilyspen.ttf');
+}
+
+@font-face {
+  font-family: 'PeaPinkPeaches';
+  src: url('../font/peapinkpeaches.ttf');
+}
+
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('../font/PressStart2P-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Princess Sofia';
+  src: url('../font/PrincessSofia-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Reenie Beanie';
+  src: url('../font/ReenieBeanie-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Rye';
+  src: url('../font/Rye-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Sacramento';
+  src: url('../font/Sacramento-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('../font/VT323-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Walter Turncoat';
+  src: url('../font/WalterTurncoat-Regular.ttf');
+}
+
+.font-ArchitectsDaughter {
+  font-family: Architects Daughter;
+}
+.font-BrushScriptMT {
+  font-family: Brush Script MT, cursive;
+}
+.font-CaveatVariable {
+  font-family: Caveat Variable;
+  font-size: 120%;
+}
+.font-CoveredByYourGrace {
+  font-family: Covered By Your Grace;
+}
+.font-CraftyGirls {
+  font-family: Crafty Girls;
+}
+.font-Creepster {
+  font-family: Creepster;
+}
+.font-DancingScript {
+  font-family: Dancing Script;
+  font-size: 130%;
+}
+.font-DefaultFont {
+  font-family: inherit;
+}
+.font-Devonshire {
+  font-family: Devonshire;
+}
+.font-HomemadeApple {
+  font-family: Homemade Apple;
+}
+.font-IndieFlower {
+  font-family: Indie Flower;
+}
+.font-LiuJianMaoCao {
+  font-family: Liu Jian Mao Cao;
+}
+.font-Monaco {
+  font-family: monaco, Consolas, Lucida Console, monospace;
+}
+.font-MysteryQuest {
+  font-family: Mystery Quest;
+}
+.font-NewTegomin {
+  font-family: NewTegomin;
+  font-size: 110%;
+}
+.font-Pangolin {
+  font-family: Pangolin;
+}
+.font-PeaEmilysPen {
+  font-family: PeaEmilysPen;
+}
+.font-PeaPinkPeaches {
+  font-family: 'PeaPinkPeaches';
+}
+.font-PressStart2P {
+  font-family: PressStart2P;
+}
+.font-PrincessSofia {
+  font-family: Princess Sofia;
+}
+.font-ReenieBeanie {
+  font-family: Reenie Beanie;
+}
+.font-Rye {
+  font-family: Rye;
+}
+.font-Sacramento {
+  font-family: Sacramento;
+}
+.font-ShadowsIntoLight {
+  font-family: Shadows Into Light;
+  font-size: 110%;
+}
+.font-TitilliumWeb {
+  font-family: Titillium Web;
+  font-weight: bold;
+}
+.font-VT323 {
+  font-family: VT323;
+}
+.font-WalterTurncoat {
+  font-family: Walter Turncoat;
+}
+
+
+.font-item {
+  display: flex;
+  align-items: baseline;
+}
+
+.font-check {
+  padding-right: 4px;
+}
+
+.font-check-spacer {
+  width: 20px;
+}
+
+.board-entry-section {
+  display: flex;
+  margin: 10px;
+}
+
+.board-entry-section > span {
+  margin: 0px 4px;
+}
+
+.board-round-counter {
+  font-size: 18px;
+  font-style: italic;
+  font-weight: bold;
+  padding: 1px 1px;
+}
+
+.board-round-max {
+  padding: 1px 1px;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.board-round-max:hover {
+  border: 1px solid;
+  padding: 0px 7px;
+}
+
+
+.board-label {
+  width: 110px;
+  font-weight: bold;
+}
+
+.board-prev-lead {
+  border: 1px solid white;
+  border-radius: 4px;
+  font-style: italic;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+.board-text {
+  position: relative;
+  display: flex;
+  height: 150px;
+  font-size: 22px;
+  flex-grow: 1;
+}
+
+.board-text-area {
+  flex-grow: 1;
+}
+
+.board-save-indicator{
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  z-index: 10;
+  font-style: italic;
+  color:rgba(0, 0, 0, .45);
+}
+
+.board-done-section {
+  display: flex;
+  margin: 10px;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.board-no-previous {
+  display: flex;
+  border: 1px solid white;
+  border-radius: 8px;
+  font-style: italic;
+  padding: 5px;
+  margin: 10px;
+}
+
+.board-timer-section {
+  border: 2px solid orange;
+  border-radius: 8px;
+  display: flex;
+  margin: 10px;
+  font-weight: bold;
+  font-size: 30px;
+  color: red;
+  justify-content: center;
+}
+
+/* ----------------------------------------------------------  */
+
+.board-review-section {
+  display: flex;
+  margin: 10px;
+}
+
+.board-review-header {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.board-review-author-section {
+  display: flex;
+  margin: 10px;
+}
+.board-review-author {
+  margin-top: 5px;
+}
+
+.board-review-story-section {
+  margin: 10px;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 5px;
+  color: black;
+  background-image: url("../app/floral-old-paper-or-parchment-900x702.jpg");
+}
+
+.board-cur-story-author {
+  font-size: 22px;
+  font-style: italic;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.board-author-circle-container {
+  margin: 0px 8px;
+  display: flex;
+}
+
+.board-author-circle {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  border: 2px solid;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  margin: 0px 3px;
+  cursor: default;
+  position: relative;
+  filter: drop-shadow(0px 0px 1px black);
+}
+
+.board-author-circle:hover {
+  background: #3362a5;
+  color: rgba(255, 255, 255, 0.685);
+}
+
+.board-author-expired {
+  color: red;
+  font-style: italic;
+}
+
+.board-author-afk {
+  color: gray;
+  font-style: italic;
+}
+
+.board-author-finished {
+  color: rgb(4, 243, 4);
+}
+
+.board-author-initial {
+  margin-top: -3px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.board-author-leader {
+  font-size: 12px;
+  position: absolute;
+  left: -4px;
+  top: -7px;
+  color: gold;
+  filter: drop-shadow(0px 0px 1px black);
+}
+
+.board-author-finish-check {
+  color: rgb(4, 243, 4);
+  position: absolute;
+  top: -5px;
+  right: -4px;
+  font-size: 12px;
+  filter: drop-shadow(0px 0px 1px black);
+}
+
+.board-cur-story-fragment-container {
+  display: flex;
+}
+
+.board-cur-fragment-author {
+  font-style: italic;
+  color: gray;
+  padding-right: 10px;
+}
+
+.board-cur-fragment-visible {
+  font-style: italic;
+}
+
+.board-next-button {
+  margin: 10px;
+}

@@ -1,0 +1,31 @@
+package com.bubba.game.writing.rest.types;
+
+public enum FontFamily {
+  ArchitectsDaughter,
+  BrushScriptMT,
+  CaveatVariable,
+  CoveredByYourGrace,
+  CraftyGirls,
+  Creepster,
+  DancingScript,
+  DefaultFont,
+  Devonshire,
+  HomemadeApple,
+  IndieFlower,
+  LiuJianMaoCao,
+  Monaco,
+  MysteryQuest,
+  NewTegomin,
+  Pangolin,
+  PeaEmilysPen,
+  PeaPinkPeaches,
+  PressStart2P,
+  PrincessSofia,
+  ReenieBeanie,
+  Rye,
+  Sacramento,
+  ShadowsIntoLight,
+  TitilliumWeb,
+  VT323,
+  WalterTurncoat
+}

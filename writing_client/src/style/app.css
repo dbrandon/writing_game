@@ -1,0 +1,62 @@
+/* styles in src/style directory are applied to the whole page */
+body {
+  background: #0147A7;
+  color: #fff;
+}
+
+a {
+  color: #03A9F4;
+}
+
+main {
+  padding: 1em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin-top: 50px;
+  display: block;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.app-title {
+  font-family: Dancing Script;
+  margin: 5px 10px;
+}
+
+.error-text {
+  font-weight: bold;
+  margin: 5px 20px;
+  color: red;
+}
+
+.writing-game-modal {
+  color: black;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropright-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 50px;
+  left: 100%;
+  margin-left: .1rem;
+  margin-top: -1px;
+  margin-right: .1rem;
+}
+
+.dropright-submenu .dropdown-menu {
+  top: 0;
+  right: 100%;
+  margin-left: 10rem;
+  margin-top: -1px;
+  margin-right: .1rem;
+  color: red;
+}
