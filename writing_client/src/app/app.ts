@@ -35,6 +35,22 @@ class AppCtrl {
     console.log('loaded app control');
 
     SessionTracker.setAppCtrl(this);
+
+    this.tryWs();
+  }
+
+  private tryWs() {
+    let ws = new WebSocket('ws://localhost:8080/hello');
+    ws.onmessage = (message) => {
+      console.log('Got a ws message: [' + message.data + ']');
+      console.log('  Port: ' + message.ports)
+    }
+    ws.onclose = (ev) => {
+      console.log('got a close event: ' + ev.code);
+    }
+    ws.onopen = () => {
+      ws.send(JSON.stringify({'@class': '.SimpleRequest', 'text': 'Request from the browser', 'number': 1337}))
+    };
   }
 
   setGameState(state : GameState) {
