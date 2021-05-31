@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -16,8 +17,6 @@ import com.bubba.game.writing.rest.types.FragmentUpdate;
 import com.bubba.game.writing.rest.types.RoomStatus;
 import com.bubba.game.writing.rest.types.RoomStatusResponse;
 import com.bubba.game.writing.rest.types.WriterStatus;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Group of stories that were rotated between authors
@@ -206,19 +205,19 @@ public class Episode {
     if(roundTimeout != 0 && System.currentTimeMillis() >= roundTimeout) {
       roundTimeout = 0;
       if(roundNumber == maxRounds) {
+        EpisodeArchive archive = new EpisodeArchive();
+        
+        archive.setEpisodeId(UUID.randomUUID().toString());
+        archive.setFinishTime(System.currentTimeMillis());
+        
         log.log(Level.INFO, "Episode is finished!");
-        getStoryList().forEach(story -> story.finishStory());
+        getStoryList().forEach(story -> {
+          story.finishStory();
+          archive.getStoryList().add(story.getFinishedStory(sessionMap).getStory());
+        });
         finished = true;
         
-        FinishedStoryResponse resp = getFinishedStory(sessionMap);
-        ObjectMapper mapper = new ObjectMapper();
-        
-        try {
-          mapper.writeValueAsString(resp.getStory());
-        } catch (JsonProcessingException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
+        EpisodeArchiver.archiveEpisode(roomName, archive);
       }
       else {
         log.log(Level.INFO, "Need to advance to next round!");
@@ -318,34 +317,36 @@ public class Episode {
       WriterStatus writerStatus = new WriterStatus();
       Session session = sessionMap.get(frag.getAuthorSessionId());
       
-      writerStatus.setAuthor(session.getName());
-      writerStatus.setExpired(session == null || session.isExpired());
-      writerStatus.setFinished(frag.isFinished() && !writerStatus.isExpired());
-      writerStatus.setFont(session.getFont());
-      writerStatus.setMyStatus(sessionId.equals(frag.getAuthorSessionId()));
-      writerStatus.setPublicId(session.getPublicSessionId());
-      writerStatus.setReportedAfk(session != null && session.isReportedAfk());
-      writerStatus.setRoomLeader(session == roomLeader);
+      if(session != null) {
+        writerStatus.setAuthor(session.getName());
+        writerStatus.setExpired(session.isExpired());
+        writerStatus.setFinished(frag.isFinished() && !writerStatus.isExpired());
+        writerStatus.setFont(session.getFont());
+        writerStatus.setMyStatus(sessionId.equals(frag.getAuthorSessionId()));
+        writerStatus.setPublicId(session.getPublicSessionId());
+        writerStatus.setReportedAfk(session != null && session.isReportedAfk());
+        writerStatus.setRoomLeader(session == roomLeader);
       
-      if(writerStatus.isMyStatus()) {
-        if(!finished) {
-          StoryFragment previous = story.getPreviousFragment();
+        if(writerStatus.isMyStatus()) {
+          if(!finished) {
+            StoryFragment previous = story.getPreviousFragment();
         
-          status.setFragmentDone(frag.isFinished());
-          if(previous != null) {
-            Session prevAuthorSession = sessionMap.get(previous.getAuthorSessionId());
+            status.setFragmentDone(frag.isFinished());
+            if(previous != null) {
+              Session prevAuthorSession = sessionMap.get(previous.getAuthorSessionId());
             
-            status.setPrevAuthorPublicId(prevAuthorSession == null ? null : prevAuthorSession.getPublicSessionId());
-            status.setPrevVisibleFragment(previous.getVisibleText());
+              status.setPrevAuthorPublicId(prevAuthorSession == null ? null : prevAuthorSession.getPublicSessionId());
+              status.setPrevVisibleFragment(previous.getVisibleText());
+            }
+            status.setWorkingHiddenFragment(frag.getHiddenText());
+            status.setWorkingVisibleFragment(frag.getVisibleText());
           }
-          status.setWorkingHiddenFragment(frag.getHiddenText());
-          status.setWorkingVisibleFragment(frag.getVisibleText());
-        }
         
-        status.getWriterStatusList().add(0, writerStatus);
-      }
-      else {
-        status.getWriterStatusList().add(writerStatus);
+          status.getWriterStatusList().add(0, writerStatus);
+        }
+        else if(!session.isFullyExpired()) {
+          status.getWriterStatusList().add(writerStatus);
+        }
       }
     });
     

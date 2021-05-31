@@ -13,6 +13,7 @@
     "bootstrap": "^4.6.0",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
+    "protobufjs": "^6.11.2",
     "ui-bootstrap4": "^3.0.7"
   },
   "devDependencies": {
@@ -36,7 +37,9 @@
   "scripts": {
     "build": "webpack --bail --progress --profile --mode=production",
     "start": "webpack serve --mode=development",
-    "production": "webpack -p"
+    "production": "webpack -p",
+    "pbjs": "pbjs -t static-module -w commonjs -o src/app/proto_pbjs.js ../server/src/main/proto/test.proto",
+    "pbts" : "pbts -o src/app/proto_pbjs.d.ts src/app/proto_pbjs.js"
   },
   "keywords": [],
   "author": "",

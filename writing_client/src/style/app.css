@@ -32,6 +32,10 @@ footer {
   color: red;
 }
 
+.name-prompt {
+  margin: 10px;
+}
+
 .writing-game-modal {
   color: black;
 }

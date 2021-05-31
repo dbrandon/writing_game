@@ -7,6 +7,7 @@ import '../style/ctrl.css';
 
 import { ErrorDialog } from './errorDialog';
 import { PromptDialog } from './promptDialog';
+import { MenuDialog, MenuOption } from './menuDialog';
 
 export let writingBoard = () => {
   return {
@@ -24,6 +25,8 @@ interface WritingBoardScope extends IScope {
 
   autoSaveRunning : boolean;
 }
+
+const LIGHT_PARCHMENT_URL = 'https://www.ppt-backgrounds.net/thumbs/parchment-white-parchment-light-parchment-paper-parchment---design-downloads.jpeg';
 
 export class WritingBoardCtrl {
   private $scope: WritingBoardScope;
@@ -50,6 +53,8 @@ export class WritingBoardCtrl {
   private amLeader : boolean;
 
   private selectedWriter : WriterStatus;
+
+  private paperStyle : { [key: string]: string } = {};
 
   fontList = [
     'ArchitectsDaughter',
@@ -92,6 +97,7 @@ export class WritingBoardCtrl {
     this.wasEpisodeDone = false;
 
     this.$scope.curFont = 'DefaultFont';
+///    this.setBackgroundPaper(LIGHT_PARCHMENT_URL);
 
     this.statusQuery = $interval(() => {this.queryStatus(false);}, 2000);
     $scope.$on('$destroy', () => {
@@ -174,6 +180,29 @@ export class WritingBoardCtrl {
         })
       })
       .catch(() => {});
+  }
+
+  async selectBackgroundPaper() {
+    let option = await new MenuDialog<string>(this.$uibModal, 'Select Paper', 'Paper selection', [
+      { label: 'Blank', value: '' },
+      { label: 'Wedding Paper', value: 'https://tierrasuratherzog.com/wp-content/uploads/2019/05/TS-Wedding-Paper-BG.jpg' },
+      { label: 'Light Parchment', value: LIGHT_PARCHMENT_URL },
+      { label: 'Light Parchment Texture', value: 'https://i0.wp.com/tatterednestdesigns.com/wp-content/uploads/2017/08/Light-Parchment-Texture.jpg' },
+      { label: 'Pretty Rainbow Paper', value: 'https://cdn.pixabay.com/photo/2016/12/02/12/06/background-1877688_1280.jpg'}
+    ]).open();
+
+    if(option) {
+      this.setBackgroundPaper(option.value);
+    }
+  }
+
+  private setBackgroundPaper(url : string) {
+    if(!url || url === '') {
+      delete this.paperStyle['background-image']
+    }
+    else {
+      this.paperStyle['background-image'] = 'url("' + url + '")';
+    }
   }
 
   selectFinishedStory(writer : WriterStatus) {

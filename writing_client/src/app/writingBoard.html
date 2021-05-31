@@ -17,20 +17,22 @@
       <h6 class="dropdown-header" ng-show="writer.expired">(Session Expired)</h6>
       <h6 class="dropdown-header" ng-show="writer.reportedAfk">(Reported AFK)</h6>
       <a class="dropdown-item" href="#" ng-show="writer.myStatus" ng-click="ctrl.changeName()"><i class="fas fa-book"></i> Change my name</a>
-      <a class="dropdown-item dropleft dropdown-toggle" data-toggle="dropdown" href="#" ng-show="writer.myStatus"><i class="fas fa-font"></i> Select My Font</a>
-        <div class="dropdown-menu dropdown-menu-left" style="left: 30px;">
-          <h6 class="dropdown-header">Select My Font</h6>
-            <a ng-repeat="font in ctrl.fontList"
-             class="dropdown-item font-item"
-             ng-click="ctrl.changeFont(font)"
-             href="#">
-              <span ng-show="curFont == font" class="font-check"><i class="fas fa-check"></i></span>
-              <span ng-hide="curFont == font" class="font-check-spacer"></span>
-              <span ng-class="'font-' + font">{{font}}</span>
-            </a>
-        </div>
+
+      <a class="dropdown-item dropleft dropdown-toggle" data-toggle="dropdown" href="#" ng-show="writer.myStatus"><i
+          class="fas fa-font"></i> Select My Font</a>
+      <div class="dropdown-menu dropdown-menu-left" style="left: 30px;">
+        <h6 class="dropdown-header">Select My Font</h6>
+        <a ng-repeat="font in ctrl.fontList" class="dropdown-item font-item" ng-click="ctrl.changeFont(font)" href="#">
+          <span ng-show="curFont == font" class="font-check"><i class="fas fa-check"></i></span>
+          <span ng-hide="curFont == font" class="font-check-spacer"></span>
+          <span ng-class="'font-' + font">{{font}}</span>
+        </a>
+      </div>
 
       <a class="dropdown-item" href="#" ng-hide="writer.roomLeader" ng-click="ctrl.authorCommand(writer, 'PROMOTE_LEADER')"><i class="fas fa-graduation-cap"></i> Promote {{writer.author}} to leader</a>
+
+      <a class="dropdown-item" href="#" ng-show="writer.myStatus" ng-click="ctrl.selectBackgroundPaper()"><i class="fas fa-file-image"></i> Select background paper</a>
+
       <a class="dropdown-item" href="#" ng-click="ctrl.authorCommand(writer, 'KICK')"><i class="fas fa-thumbs-down"></i> Give {{writer.author}} das boot!</a>
       <a class="dropdown-item" href="#" ng-hide="writer.reportedAfk" ng-click="ctrl.authorCommand(writer, 'MARK_AFK')"><i class="fas fa-user-times"></i>Report Away</a>
       <a class="dropdown-item" href="#" ng-show="writer.myStatus && writer.reportedAfk" ng-click="ctrl.authorCommand(writer, 'MARK_NOT_AFK')"><i class="fas fa-user-plus"></i>I'm back</a>
@@ -68,6 +70,7 @@
     <span class="board-label font-DancingScript" ng-show="lastRound">Finale:</span>
     <span class="board-text">
       <textarea id="myHidden" class="board-text-area {{'font-' + curFont}}" 
+                ng-style="ctrl.paperStyle"
                 ng-model="ctrl.frag.hiddenText" 
                 ng-keypress="ctrl.handleTextTyped('press', $event)"
                 ng-keydown="ctrl.handleTextTyped($event, 'down')"></textarea>
@@ -78,14 +81,17 @@
   <div class="board-entry-section" ng-hide="lastRound">
     <span class="board-label">Lead:</span>
     <span class="board-text">
-      <textArea id="myLead" class="board-text-area {{'font-' + curFont}}" ng-model="ctrl.frag.visibleText" ng-keypress="ctrl.handleTextTyped($event)">
+      <textArea id="myLead" class="board-text-area {{'font-' + curFont}}" 
+                ng-style="ctrl.paperStyle"
+                ng-model="ctrl.frag.visibleText"
+                ng-keypress="ctrl.handleTextTyped($event)">
     </textArea>
   </div>
 
   <div class="board-done-section">
     <span class="board-done-indicator">
       <input type="checkbox" ng-model="ctrl.frag.done" ng-change="ctrl.handleDoneChange()" name="doneIndicator">
-      <label for="doneIndicator">Finished with fragment</label>
+      <label for="doneIndicator">I'm ready</label>
     </span>
   </div>
 
@@ -96,7 +102,7 @@
 
 <div ng-if="ctrl.state === 'REVIEW'">
   <div ng-show="ctrl.amLeader">
-    <span>Select Author</span>
+    <span class="board-review-author-prompt">Select Author</span>
     <span class="dropdown">
       <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ctrl.selectedWriter == null ? 'Select an Author' : ctrl.selectedWriter.author}}
@@ -113,7 +119,7 @@
     <span>Waiting for the leader to select a story</span>
   </div>
 
-  <div ng-show="ctrl.curStory != null" class="board-review-story-section">
+  <div ng-show="ctrl.curStory != null" class="board-review-story-section" ng-style="ctrl.paperStyle">
     <div class="board-cur-story-author {{'font-' + ctrl.curStory.font}}">{{ctrl.curStory.author}}'s Story:</div>
     <div class="board-cur-story-fragment-container" ng-repeat="fragment in ctrl.curStory.fragmentList">
       <span class="board-cur-fragment-author">({{fragment.author}})</span>
@@ -124,9 +130,14 @@
     </div>
   </div>
 
+  <div class="board-review-button-section">
+    <button class="btn btn-success board-next-button" ng-if="ctrl.amLeader && !ctrl.status.episodeTimerRunning"
+      ng-click="ctrl.nextEpisode()">Start Another Round</button>
+    <button class="btn btn-danger board-next-button" ng-if="ctrl.amLeader && ctrl.status.episodeTimerRunning"
+      ng-click="ctrl.cancelNextEpisode()">Cancel Start Next Episode</button>
+  </div>
+
   <div class="board-timer-section" ng-if="ctrl.status.episodeTimerRunning">
     <span>Next episode starts in {{ctrl.episodeTimeRemaining}} seconds...</span>
   </div>
-  <button class="board-next-button" ng-if="ctrl.amLeader && !ctrl.status.episodeTimerRunning" ng-click="ctrl.nextEpisode()">Start Another Round</button>
-  <button class="board-next-button" ng-if="ctrl.amLeader && ctrl.status.episodeTimerRunning" ng-click="ctrl.cancelNextEpisode()">Cancel Start Next Episode</button>
 </div>

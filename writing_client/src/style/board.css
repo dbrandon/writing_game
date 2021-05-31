@@ -286,6 +286,10 @@
   color:rgba(0, 0, 0, .45);
 }
 
+.board-done-indicator {
+  margin: 0px 10px;
+}
+
 .board-done-section {
   display: flex;
   margin: 10px;
@@ -315,6 +319,10 @@
 
 /* ----------------------------------------------------------  */
 
+.board-review-author-prompt {
+  margin: 10px;
+}
+
 .board-review-section {
   display: flex;
   margin: 10px;
@@ -339,7 +347,7 @@
   border-radius: 8px;
   padding: 5px;
   color: black;
-  background-image: url("../app/floral-old-paper-or-parchment-900x702.jpg");
+  background: #fff0ad;
 }
 
 .board-cur-story-author {
@@ -426,6 +434,10 @@
   font-style: italic;
 }
 
+.board-review-button-section {
+  display: flex;
+  flex-direction: row-reverse;
+}
 .board-next-button {
   margin: 10px;
 }

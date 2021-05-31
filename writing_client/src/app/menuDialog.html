@@ -1,0 +1,22 @@
+<div class="writing-game-modal">
+  <div class="modal-header">
+    <h3 class="modal-title">{{title}}</h3>
+  </div>
+
+  <div class="modal-body">
+    <span>{{prompt}}</span>
+    <span class="dropdown">
+      <button class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Selection
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" ng-repeat="option in options" ng-click="itemSelected(option)">{{option.label}}</a>
+      </div>
+    </span>
+  </div>
+
+  <div class="modal-footer">
+    <!-- <button class="btn btn-primary" type="button" ng-click="handleOk()">OK</button> -->
+    <button class="btn btn-secondary" type="button" ng-click="handleDismiss()">Cancel</button>
+  </div>
+</div>

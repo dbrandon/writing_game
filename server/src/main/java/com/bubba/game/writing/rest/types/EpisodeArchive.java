@@ -1,19 +1,27 @@
 package com.bubba.game.writing.rest.types;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class EpisodeArchive {
+  private String episodeId;
   private List<FinishedStory> storyList;
-  private Date finishDate;
+  private long finishTime;
   
-  public Date getFinishDate() {
-    return finishDate;
+  public String getEpisodeId() {
+    return episodeId;
   }
   
-  public void setFinishDate(Date finishDate) {
-    this.finishDate = finishDate;
+  public void setEpisodeId(String episodeId) {
+    this.episodeId = episodeId;
+  }
+  
+  public long getFinishTime() {
+    return finishTime;
+  }
+  
+  public void setFinishTime(long finishTime) {
+    this.finishTime = finishTime;
   }
   
   public List<FinishedStory> getStoryList() {

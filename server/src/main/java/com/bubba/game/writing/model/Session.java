@@ -6,11 +6,13 @@ import com.bubba.game.writing.rest.types.FontFamily;
 import com.bubba.game.writing.rest.types.SessionInfo;
 
 public class Session {
+  public final static long EXPIRED_GRACE_PERIOD_MILLIS = 30000;
   private String sessionId;
   private String publicSessionId;
   private long lastAccess;
   private String name;
   private boolean expired;
+  private long expiredTime;
   private boolean reportedAfk;
   private FontFamily font;
   
@@ -41,8 +43,22 @@ public class Session {
     return expired;
   }
   
+  public boolean isFullyExpired() {
+    return expired && ((System.currentTimeMillis() - expiredTime) > EXPIRED_GRACE_PERIOD_MILLIS);
+  }
+  
   public void setExpired(boolean expired) {
+    if(expired && !this.expired) {
+      this.expiredTime = System.currentTimeMillis();
+    }
+    if(!expired) {
+      expiredTime = 0;
+    }
     this.expired = expired;
+  }
+  
+  public long getExpiredTime() {
+    return expiredTime;
   }
   
   public FontFamily getFont() {

@@ -17,6 +17,8 @@ import '@fortawesome/fontawesome-free/js/all'
 import '../style/app.css';
 import '../style/board.css';
 
+import { Test } from './proto_pbjs';
+
 let app = () => {
   return {
     template: require('./app.html').default,
@@ -36,11 +38,11 @@ class AppCtrl {
 
     SessionTracker.setAppCtrl(this);
 
-    this.tryWs();
+//    this.tryWs();
   }
 
   private tryWs() {
-    let ws = new WebSocket('ws://localhost:8080/hello');
+    let ws = new WebSocket('ws://localhost:8080/pgrm');
     ws.onmessage = (message) => {
       console.log('Got a ws message: [' + message.data + ']');
       console.log('  Port: ' + message.ports)
@@ -49,7 +51,15 @@ class AppCtrl {
       console.log('got a close event: ' + ev.code);
     }
     ws.onopen = () => {
-      ws.send(JSON.stringify({'@class': '.SimpleRequest', 'text': 'Request from the browser', 'number': 1337}))
+      let json = { '@class': '.SimpleRequest', 'text': 'Request from the browser', 'number': 1337 }
+      ws.send(JSON.stringify(json))
+      ws.send(new Blob([JSON.stringify(json)]));
+
+      let message = Test.create();
+      message.num = 15;
+      message.payload = 'hello from protobuf!';
+      message.timestamp = new Date().getTime();
+      ws.send(Test.encode(message).finish());
     };
   }
 
